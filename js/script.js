@@ -11,6 +11,7 @@ function generatePokemonCards(pokemons) {
                                 <img src="${pokemons[i].sprite}">
                             </div>
                             <div>
+                            <button type="button" class="btn btn-primary mx-2" onclick="prepareForm(${pokemons[i].id})" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
                                 <button type="button" class="btn btn-danger mx-2" onclick="deletePokemon(${pokemons[i].id})">Eliminar</button>
                             </div>
                         </div>
@@ -70,4 +71,27 @@ function deletePokemon(id){
         .catch(function(error){
             console.log(error);
         })
+}
+
+function prepareForm(id) {
+    if(id) {
+        axios.get(`https://pokemons-data.herokuapp.com/api/v1/pokemons/${id}`)
+            .then((response)=>{
+                let pokemon = response.data;
+                document.getElementById('name').value = pokemon.name;
+                document.getElementById('base_experience').value = pokemon.base_experience;
+                document.getElementById('height').value = pokemon.height;
+                document.getElementById('weight').value = pokemon.weight;
+                document.getElementById('sprite').value = pokemon.sprite;
+            })
+            .catch((error)=>{
+                console.log(error);
+            })
+    } else {
+        document.getElementById('name').value = '';
+        document.getElementById('base_experience').value = '';
+        document.getElementById('height').value = '';
+        document.getElementById('weight').value = '';
+        document.getElementById('sprite').value = '';
+    }
 }
