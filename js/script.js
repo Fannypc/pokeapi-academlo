@@ -1,3 +1,5 @@
+let updatingId = null;
+
 function generatePokemonCards(pokemons) {
     let html = '';
 
@@ -11,7 +13,7 @@ function generatePokemonCards(pokemons) {
                                 <img src="${pokemons[i].sprite}">
                             </div>
                             <div>
-                            <button type="button" class="btn btn-primary mx-2" onclick="prepareForm(${pokemons[i].id})" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
+                                <button type="button" class="btn btn-primary mx-2" onclick="prepareForm(${pokemons[i].id})" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
                                 <button type="button" class="btn btn-danger mx-2" onclick="deletePokemon(${pokemons[i].id})">Eliminar</button>
                             </div>
                         </div>
@@ -37,19 +39,7 @@ function getPokemons() {
 getPokemons();
 
 function createPokemon() {
-    let name = document.getElementById('name').value;
-    let base_experience = document.getElementById('base_experience').value;
-    let height = document.getElementById('height').value;
-    let weight = document.getElementById('weight').value;
-    let sprite = document.getElementById('sprite').value;
-
-    let pokemon = {
-        name: name, 
-        base_experience: base_experience,
-        height: height,
-        weight: weight,
-        sprite: sprite
-    }
+    let pokemon = generatePokemonObj(); 
 
     axios.post('https://pokemons-data.herokuapp.com/api/v1/pokemons', pokemon)
         .then(function(response) {
@@ -75,6 +65,7 @@ function deletePokemon(id){
 
 function prepareForm(id) {
     if(id) {
+        updatingId = id;
         axios.get(`https://pokemons-data.herokuapp.com/api/v1/pokemons/${id}`)
             .then((response)=>{
                 let pokemon = response.data;
@@ -88,10 +79,51 @@ function prepareForm(id) {
                 console.log(error);
             })
     } else {
+        updatingId = null;
         document.getElementById('name').value = '';
         document.getElementById('base_experience').value = '';
         document.getElementById('height').value = '';
         document.getElementById('weight').value = '';
         document.getElementById('sprite').value = '';
     }
+}
+
+function updatePokemon() {
+    let pokemon = generatePokemonObj();
+
+    axios.put(`https://pokemons-data.herokuapp.com/api/v1/pokemons/${updatingId}`, pokemon)
+        .then((response)=>{
+            console.log(response);
+            getPokemons();
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+}
+
+
+function createOrUpdate() {
+    if(updatingId) {
+        updatePokemon();
+    } else {
+        createPokemon();
+    }
+}
+
+function generatePokemonObj() {
+    let name = document.getElementById('name').value;
+    let base_experience = document.getElementById('base_experience').value;
+    let height = document.getElementById('height').value;
+    let weight = document.getElementById('weight').value;
+    let sprite = document.getElementById('sprite').value;
+
+    let pokemon = {
+        name: name, 
+        base_experience: base_experience,
+        height: height,
+        weight: weight,
+        sprite: sprite
+    }
+
+    return pokemon;
 }

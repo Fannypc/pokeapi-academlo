@@ -3,23 +3,23 @@
 
 
 
-// tipos de funciones 
-// funciones declaradas
+// // tipos de funciones 
+// // funciones declaradas
 
-function example() {
-    console.log('hola');
-}
+// function example() {
+//     console.log('hola');
+// }
 
-// funciones anonimas
-let b = function() {
-    console.log('hola');
-}
+// // funciones anonimas
+// let b = function() {
+//     console.log('hola');
+// }
 
 
-// funciones de flecha
-let c = () => {
-    console.log('hola');
-}
+// // funciones de flecha
+// let c = () => {
+//     console.log('hola');
+// }
 
 
 // let d = (number) => {
@@ -168,5 +168,7 @@ let data = [{
 // console.log(newArrayNumbers); // [8,10]
 
 
-let a = 1;
+// let a = 1;
+
+
 
